@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Str;
 use Laravel\Ai\Models\Conversation;
 use Laravel\Ai\Models\ConversationMessage;
+use Livewire\Livewire;
 use Packstub\Agents\Filament\Pages\Chat;
 use Packstub\Agents\Filament\Pages\Chats;
 use Packstub\Agents\Jobs\RunAgentTurn;
@@ -561,4 +562,15 @@ it('lets the app add its own filters and columns to the Chats list', function ()
         ->filterTable('long')
         ->assertCanSeeTableRecords([$long])
         ->assertCanNotSeeTableRecords([$short]);
+});
+
+it('fills the composer from ?prompt= without sending, so a link cannot ask in the person\'s name', function () {
+    actingAs($this->user());
+
+    Livewire::withQueryParams(['prompt' => 'Delete every widget'])->test(Chat::class)
+        ->assertSet('prompt', 'Delete every widget')
+        ->assertSet('autoSend', false);
+
+    $this->withSession(['packstub-agents.prompt' => 'From the app']);
+    livewire(Chat::class)->assertSet('prompt', 'From the app')->assertSet('autoSend', true);
 });

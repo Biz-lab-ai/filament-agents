@@ -4,6 +4,7 @@ All notable changes to `packstub/filament-agents` are documented here.
 
 ## Unreleased
 
+- Security: a `?prompt=` link only fills the chat box; the person sends it. A question an app hands over through the session is still sent on its own
 - Security: the chats list and the sidebar show only the chats started in the current workspace (needs packstub/agents with the conversation `tenant` column)
 - `composer.json`'s homepage points at the package's page on packstub.dev
 
